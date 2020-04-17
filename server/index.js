@@ -1,17 +1,22 @@
 const express = require('express'); 
 const mongoose = require("mongoose");
 const { MONGOURI } = require('./config/keys');
-const User = require('./Models/User')
+const bodyParser = require('body-parser');
+
 
 
 mongoose.connect( MONGOURI,{ useNewUrlParser: true, useUnifiedTopology: true},(err)=>{
-    if(err) throw err; 
+    if(err) return err; 
     console.log('successfully connected to the data base')
 });
 
 
 
 const app = express(); 
+
+app.use(bodyParser());
+app.use(require('./routes/auth')); 
+
 
 
 
