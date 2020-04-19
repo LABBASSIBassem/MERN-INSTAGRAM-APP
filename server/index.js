@@ -16,6 +16,7 @@ const app = express();
 
 app.use(bodyParser());
 app.use(require('./routes/auth')); 
+app.use(require('./routes/post')); 
 
 
 

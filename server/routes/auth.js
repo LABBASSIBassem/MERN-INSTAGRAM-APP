@@ -1,17 +1,41 @@
 const express = require('express'); 
 const router = express.Router(); 
 const bcrypt = require('bcrypt');
-const User = require('../Models/User')
+const jwt = require('jsonwebtoken');
+const User = require('../Models/User');
+const { JWT_SECRET } = require('../config/keys');
 
 
 
-router.get('/signIn', (req, res) =>{
 
-    res.send('api sign inn')
-} )
+//creating the signIn API
+router.post('/signIn', (req, res) =>{
+   const { email , password } = req.body; 
+   if(!email || !password){
+      return res.status(422).json({error: "please provide email or password"})
+   }
+    User.findOne({email: email}).then(savedUser=>{
+       if(!savedUser){
+           return  res.status(422).json({error: "invalid user data  please try again"})
+             }
+       bcrypt.compare(password, savedUser.password)
+        .then(doMatch =>{
+            if(doMatch){
+            const token = jwt.sign({_id: savedUser._id}, JWT_SECRET)
+            res.json({token})
+            }
+        else{
+           return res.status(400).json({error:"invalid password please try again"})
+        }
+        })
 
+    })
+    .catch(err=> res.send(err))
+})
+
+//creating the signUp API
 router.post('/signUp', (req, res) =>{
-    const {name, email , password } = req.body; 
+    const { name, email , password } = req.body; 
     if(!name || !email || !password){
       return res.status(400).json({err: "can't accept your data"})
     }
