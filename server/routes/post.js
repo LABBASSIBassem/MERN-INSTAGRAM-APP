@@ -30,12 +30,25 @@ router.post('/createpost', requireLogin , (req,res)=>{
 })
 
 //geting all the posts
-router.post('/showposts',requireLogin, (req,res)=>{
-  Post.find().then(postsList=>{
+router.get('/showposts',requireLogin,(req,res)=>{
+  Post.find()
+  .populate("postedBy", "_id name")
+  .then(postsList=>{
       res.json({posts:postsList})
-  }).catch(err=> res.status(500).json(error: "error while fetching posts data"))
+  }).catch(err=> res.status(500).json({error: "error while fetching posts data"}))
 })
 
+//geting my posts 
+router.get('/myposts', requireLogin , (req , res)=>{
+  Post.find({postedBy: req.user._id})
+  .populate("postedBy", "_id name")
+  .then(postsList =>{
+    res.status(200).json({posts: postsList})
+  }).catch(err =>{
+      res.status(400).json({error: "geting error while fetching posts data"})
+  })
+     
+})
 
 
 module.exports = router
