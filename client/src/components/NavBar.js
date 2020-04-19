@@ -1,0 +1,27 @@
+import React from 'react'
+import {Link } from 'react-router-dom'
+
+const NavBar = () =>{
+
+    return(
+          <nav>
+    <div className="nav-wrapper white blue-text"
+   
+     >
+      <Link to='/' className="brand-logo">Cars Passion</Link>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><Link to='/signin'>SignIn</Link></li>
+        <li><Link to='/signup'>SignUp</Link></li>
+        <li><Link to='/profile'>Profile</Link></li>
+        <li><Link to='/createpost'>Create Post</Link></li>
+      </ul>
+    </div>
+  </nav>
+    )
+
+
+}
+
+
+
+export default NavBar
